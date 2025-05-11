@@ -41,7 +41,10 @@ class MainActivity : ComponentActivity() {
                     }
                     composable<Screen.CharacterDetails> {
                         val args = it.toRoute<Screen.CharacterDetails>()
-                        CharacterDetailsScreen(id = args.characterId, onNavUp = onNavUp)
+                        CharacterDetailsScreen(
+                            id = args.characterId,
+                            onNavUp = onNavUp,
+                        )
                     }
                 }
             }

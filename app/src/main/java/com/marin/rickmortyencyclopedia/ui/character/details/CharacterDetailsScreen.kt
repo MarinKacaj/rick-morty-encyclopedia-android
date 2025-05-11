@@ -3,7 +3,10 @@
  */
 package com.marin.rickmortyencyclopedia.ui.character.details
 
+import android.net.Uri
 import android.util.Log
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -23,8 +27,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.core.os.bundleOf
 import androidx.lifecycle.DEFAULT_ARGS_KEY
 import androidx.lifecycle.HasDefaultViewModelProviderFactory
@@ -39,6 +43,8 @@ import com.marin.rickmortyencyclopedia.ui.RickMortyAppBar
 import com.marin.rickmortyencyclopedia.ui.common.ErrorState
 import com.marin.rickmortyencyclopedia.ui.common.LoadingState
 import com.marin.rickmortyencyclopedia.ui.theme.RickMortyEncyclopediaAppTheme
+import com.marin.rickmortyencyclopedia.ui.util.debrief
+import java.io.OutputStream
 
 
 @Composable
@@ -69,7 +75,9 @@ fun CharacterDetailsScreen(
             )
         },
         content = { innerPaddings ->
+
             when (uiState) {
+
                 is CharacterUiState.Error -> {
                     ErrorState(
                         modifier = Modifier.padding(innerPaddings),
@@ -85,9 +93,10 @@ fun CharacterDetailsScreen(
 
                     val successUiState = uiState as CharacterUiState.Success
 
-                    Surface(modifier = Modifier
-                        .fillMaxSize()
-                        .padding(innerPaddings),
+                    Surface(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(innerPaddings),
                     ) {
                         Column(
                             modifier = Modifier
@@ -137,6 +146,14 @@ fun CharacterDetailsScreen(
                                     successUiState.data.character.episode.size,
                                 ),
                             )
+
+                            ExportButton(
+                                modifier = Modifier
+                                    .align(Alignment.CenterHorizontally)
+                                    .padding(top = RickMortyEncyclopediaAppTheme.spacing.spacerMedium),
+                                characterDebrief = successUiState.data.character.debrief(),
+                                characterId = id,
+                            )
                         }
                     }
                 }
@@ -147,13 +164,10 @@ fun CharacterDetailsScreen(
 
 @Composable
 fun LabeledProperty(label: String, property: String) {
-    Spacer(
+    Text(
         modifier = Modifier
             .fillMaxWidth()
-            .height(RickMortyEncyclopediaAppTheme.spacing.spacerXSmall)
-    )
-    Text(
-        modifier = Modifier.fillMaxWidth(),
+            .padding(top = RickMortyEncyclopediaAppTheme.spacing.spacerXSmall),
         text = label,
         style = MaterialTheme.typography.labelLarge,
     )
@@ -162,10 +176,37 @@ fun LabeledProperty(label: String, property: String) {
         text = property,
         style = MaterialTheme.typography.bodyLarge,
     )
-    Spacer(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(RickMortyEncyclopediaAppTheme.spacing.spacerXSmall)
+    HorizontalDivider(
+        modifier = Modifier.padding(top = RickMortyEncyclopediaAppTheme.spacing.spacerXSmall),
+        thickness = RickMortyEncyclopediaAppTheme.sizing.sizerXXSmall,
     )
-    HorizontalDivider(thickness = RickMortyEncyclopediaAppTheme.sizing.sizerXXSmall)
+}
+
+@Composable
+fun ExportButton(modifier: Modifier = Modifier, characterDebrief: String, characterId: Int) {
+
+    val contentResolver = LocalContext.current.contentResolver
+
+    val characterFileCreator = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.CreateDocument("text/plain"),
+        onResult = { uri: Uri? ->
+            if (uri != null) {
+                contentResolver.openOutputStream(uri)
+                    ?.use { stream: OutputStream ->
+                        val bytes = characterDebrief.toByteArray()
+                        stream.write(bytes)
+                    }
+            }
+        }
+    )
+
+    Button(
+        modifier = modifier,
+        onClick = {
+            // no need for effects here as onClick takes place outside
+            characterFileCreator.launch("character-info-$characterId.txt")
+        },
+    ) {
+        Text(text = stringResource(R.string.character_info_download))
+    }
 }

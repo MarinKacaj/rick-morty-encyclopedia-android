@@ -8,10 +8,8 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -36,8 +34,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.hideFromAccessibility
-import androidx.compose.ui.semantics.semantics
 import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -52,7 +48,6 @@ import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
-import java.util.Locale
 
 
 @Composable
@@ -207,12 +202,10 @@ fun EpisodeItem(
             text = code,
             style = MaterialTheme.typography.bodyMedium,
         )
-        Spacer(
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(RickMortyEncyclopediaAppTheme.spacing.spacerXSmall)
+        HorizontalDivider(
+            modifier = Modifier.padding(top = RickMortyEncyclopediaAppTheme.spacing.spacerXSmall),
+            thickness = RickMortyEncyclopediaAppTheme.sizing.sizerXXSmall,
         )
-        HorizontalDivider(thickness = RickMortyEncyclopediaAppTheme.sizing.sizerXXSmall)
     }
 }
 

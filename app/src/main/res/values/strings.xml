@@ -16,4 +16,5 @@
     <string name="character_origin_name">Origin (name)</string>
     <string name="character_appears_in_label">Appears in</string>
     <string name="character_appears_in_num_episodes">%1$d episodes</string>
+    <string name="character_info_download">Download character info</string>
 </resources>
