@@ -5,7 +5,6 @@ package com.marin.rickmortyencyclopedia.ui.episode
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -20,7 +19,6 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
@@ -45,12 +43,16 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.marin.rickmortyencyclopedia.R
 import com.marin.rickmortyencyclopedia.ui.RickMortyAppBar
+import com.marin.rickmortyencyclopedia.ui.common.ErrorState
+import com.marin.rickmortyencyclopedia.ui.common.LoadingState
 import com.marin.rickmortyencyclopedia.ui.theme.RickMortyEncyclopediaAppTheme
+import com.marin.rickmortyencyclopedia.ui.util.DateTimeReformatter
 import kotlinx.coroutines.flow.filter
 import java.time.Instant
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.FormatStyle
+import java.util.Locale
 
 
 @Composable
@@ -67,9 +69,10 @@ fun EpisodesScreen(
             RickMortyAppBar(canNavBack = false, title = stringResource(R.string.episodes))
         },
         content = { innerPaddings: PaddingValues ->
+
             when (uiState) {
                 is EpisodesUiState.Error -> {
-                    Error(
+                    ErrorState(
                         modifier = Modifier.padding(innerPaddings),
                         errorMessage = (uiState as EpisodesUiState.Error).error,
                     )
@@ -97,7 +100,7 @@ fun EpisodesScreen(
                         ) { episode ->
                             EpisodeItem(
                                 id = episode.id,
-                                airDate = episode.airDate,
+                                airDate = DateTimeReformatter.reformat(episode.airDate),
                                 name = episode.name,
                                 code = episode.code,
                                 onEpisodeSelected = {
@@ -127,52 +130,11 @@ fun EpisodesScreen(
                 }
 
                 EpisodesUiState.Loading -> {
-                    Loading(modifier = Modifier.padding(innerPaddings))
+                    LoadingState(modifier = Modifier.padding(innerPaddings))
                 }
             }
         }
     )
-}
-
-@Composable
-fun Error(
-    modifier: Modifier = Modifier,
-    errorMessage: String = "",
-) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(
-            imageVector = Icons.Default.Clear,
-            tint = MaterialTheme.colorScheme.error,
-            contentDescription = null,
-            modifier = Modifier
-                .semantics {
-                    // Visually impaired users don't need to read this visual cue in the TalkBack app
-                    // The text is what matters the most in this case.
-                    this.hideFromAccessibility()
-                }
-                .wrapContentSize()
-        )
-        Text(text = errorMessage)
-    }
-}
-
-@Composable
-fun Loading(
-    modifier: Modifier = Modifier,
-) {
-    Box(
-        modifier = modifier.fillMaxSize(),
-        contentAlignment = Alignment.Center
-    ) {
-        CircularProgressIndicator(
-            modifier = Modifier.wrapContentSize(),
-        )
-    }
 }
 
 @Composable
@@ -228,15 +190,12 @@ fun EpisodeItem(
         ) {
             Icon(
                 modifier = Modifier
-                    .wrapContentSize()
-                    .semantics {
-                        this.hideFromAccessibility() // not needed by TalkBack
-                    },
+                    .wrapContentSize(),
                 imageVector = Icons.Default.DateRange,
-                contentDescription = null, // not needed
+                contentDescription = stringResource(R.string.episode_air_date_a11y),
             )
             Text(
-                text = airDate,
+                text = airDate, // todo reformat
                 style = MaterialTheme.typography.bodySmall,
             )
         }

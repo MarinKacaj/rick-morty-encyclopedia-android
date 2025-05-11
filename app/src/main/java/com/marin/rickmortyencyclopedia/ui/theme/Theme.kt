@@ -48,6 +48,7 @@ data class SpacingSystem(
 @Immutable
 data class SizingSystem(
     val sizerXXSmall: Dp,
+    val sizerXXLarge: Dp,
 )
 
 val LocalSpacingSystem = staticCompositionLocalOf {
@@ -60,7 +61,7 @@ val LocalSpacingSystem = staticCompositionLocalOf {
 }
 
 val LocalSizingSystem = staticCompositionLocalOf {
-    SizingSystem(sizerXXSmall = 0.dp)
+    SizingSystem(sizerXXSmall = 0.dp, sizerXXLarge = 0.dp)
 }
 
 @Composable
@@ -88,6 +89,7 @@ fun RickMortyEncyclopediaTheme(
     )
     val sizingSystem = SizingSystem(
         sizerXXSmall = 2.dp,
+        sizerXXLarge = 64.dp,
     )
 
     CompositionLocalProvider(

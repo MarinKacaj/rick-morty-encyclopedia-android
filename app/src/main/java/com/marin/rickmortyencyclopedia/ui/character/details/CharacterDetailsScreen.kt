@@ -4,17 +4,22 @@
 package com.marin.rickmortyencyclopedia.ui.character.details
 
 import android.util.Log
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
@@ -31,6 +36,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil3.compose.AsyncImage
 import com.marin.rickmortyencyclopedia.R
 import com.marin.rickmortyencyclopedia.ui.RickMortyAppBar
+import com.marin.rickmortyencyclopedia.ui.common.ErrorState
+import com.marin.rickmortyencyclopedia.ui.common.LoadingState
+import com.marin.rickmortyencyclopedia.ui.theme.RickMortyEncyclopediaAppTheme
 
 
 @Composable
@@ -61,28 +69,103 @@ fun CharacterDetailsScreen(
             )
         },
         content = { innerPaddings ->
-            Box(modifier = Modifier.padding(innerPaddings)) {
-                when (uiState) {
-                    is CharacterUiState.Error -> {
-                        Text(text = "Error") // todo from common
-                    }
-                    CharacterUiState.Loading -> {
-                        Text(text = "Loading") // todo from common
-                    }
-                    is CharacterUiState.Success -> {
-                        val successUiState = uiState as CharacterUiState.Success
-                        AsyncImage(
-                            model = successUiState.data.character.image,
-                            contentDescription = stringResource(R.string.character_photo, successUiState.data.character.name),
-                            contentScale = ContentScale.Fit,
-                            onError = {
-                                Log.e("CharacterDetailsScreenError", it.result.toString())
-                            },
-                            modifier = Modifier.clip(CircleShape).size(56.dp) // todo DS
-                        )
+            when (uiState) {
+                is CharacterUiState.Error -> {
+                    ErrorState(
+                        modifier = Modifier.padding(innerPaddings),
+                        errorMessage = (uiState as CharacterUiState.Error).error
+                    )
+                }
+
+                CharacterUiState.Loading -> {
+                    LoadingState(modifier = Modifier.padding(innerPaddings))
+                }
+
+                is CharacterUiState.Success -> {
+
+                    val successUiState = uiState as CharacterUiState.Success
+
+                    Surface(modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPaddings),
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .padding(horizontal = RickMortyEncyclopediaAppTheme.spacing.spacerMedium)
+                        ) {
+                            AsyncImage(
+                                model = successUiState.data.character.image,
+                                contentDescription = stringResource(
+                                    R.string.character_photo,
+                                    successUiState.data.character.name
+                                ),
+                                contentScale = ContentScale.Fit,
+                                onError = {
+                                    Log.e("CharacterDetailsScreenError", it.result.toString())
+                                },
+                                modifier = Modifier
+                                    .clip(CircleShape)
+                                    .size(RickMortyEncyclopediaAppTheme.sizing.sizerXXLarge)
+                                    .align(Alignment.CenterHorizontally)
+                            )
+                            Spacer(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(RickMortyEncyclopediaAppTheme.spacing.spacerXSmall)
+                            )
+                            LabeledProperty(
+                                label = stringResource(R.string.character_name),
+                                property = successUiState.data.character.name,
+                            )
+                            LabeledProperty(
+                                label = stringResource(R.string.character_status),
+                                property = successUiState.data.character.status,
+                            )
+                            LabeledProperty(
+                                label = stringResource(R.string.character_species),
+                                property = successUiState.data.character.species,
+                            )
+                            LabeledProperty(
+                                label = stringResource(R.string.character_origin_name),
+                                property = successUiState.data.character.origin.name,
+                            )
+                            LabeledProperty(
+                                label = stringResource(R.string.character_appears_in_label),
+                                property = stringResource(
+                                    R.string.character_appears_in_num_episodes,
+                                    successUiState.data.character.episode.size,
+                                ),
+                            )
+                        }
                     }
                 }
             }
         }
     )
+}
+
+@Composable
+fun LabeledProperty(label: String, property: String) {
+    Spacer(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(RickMortyEncyclopediaAppTheme.spacing.spacerXSmall)
+    )
+    Text(
+        modifier = Modifier.fillMaxWidth(),
+        text = label,
+        style = MaterialTheme.typography.labelLarge,
+    )
+    Text(
+        modifier = Modifier.fillMaxWidth(),
+        text = property,
+        style = MaterialTheme.typography.bodyLarge,
+    )
+    Spacer(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(RickMortyEncyclopediaAppTheme.spacing.spacerXSmall)
+    )
+    HorizontalDivider(thickness = RickMortyEncyclopediaAppTheme.sizing.sizerXXSmall)
 }

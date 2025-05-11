@@ -49,8 +49,6 @@ class EpisodesViewModel(
     init {
         viewModelScope.launch {
 
-            withContext(Dispatchers.IO) { delay(3000L) } // todo undo
-
             val result = episodesRepository.getEpisodes(
                 from = "${AppContainer.BASE_API_URL}/episode"
             )
@@ -87,7 +85,6 @@ class EpisodesViewModel(
                             currentUiState.copy(isEndOfList = true)
                         }
                     } else {
-                        delay(1000L) // todo remove
 
                         val result = episodesRepository.getEpisodes(nextPage)
                         val episodesSnapshot = result.getOrNull()

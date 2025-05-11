@@ -2,6 +2,7 @@
     <string name="app_name">RickMortyEncyclopedia</string>
     <string name="back">Back</string>
     <string name="episodes">Rick and Morty Episodes</string>
+    <string name="episode_air_date_a11y">Air date</string>
     <string name="end_of_list">Nothing left to see</string>
     <string name="last_update">Last updated on %1$s</string>
 
@@ -9,4 +10,10 @@
     <string name="character_id_uncover">Uncover %1$d</string>
     <string name="character_id_title">Character %1$d</string>
     <string name="character_photo">Photo of %1$s</string>
+    <string name="character_name">Name</string>
+    <string name="character_status">Status</string>
+    <string name="character_species">Species</string>
+    <string name="character_origin_name">Origin (name)</string>
+    <string name="character_appears_in_label">Appears in</string>
+    <string name="character_appears_in_num_episodes">%1$d episodes</string>
 </resources>
