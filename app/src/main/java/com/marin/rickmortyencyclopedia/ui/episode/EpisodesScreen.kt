@@ -195,7 +195,7 @@ fun EpisodeItem(
                 contentDescription = stringResource(R.string.episode_air_date_a11y),
             )
             Text(
-                text = airDate, // todo reformat
+                text = airDate,
                 style = MaterialTheme.typography.bodySmall,
             )
         }
