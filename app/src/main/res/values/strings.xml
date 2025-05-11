@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">RickMortyEncyclopedia</string>
+    <string name="back">Back</string>
+    <string name="episodes">Rick and Morty Episodes</string>
+    <string name="end_of_list">Nothing left to see</string>
+    <string name="last_update">Last updated on %1$s!</string>
+</resources>
