@@ -3,6 +3,7 @@
  */
 package com.marin.rickmortyencyclopedia.data
 
+import android.util.Log
 import com.marin.rickmortyencyclopedia.data.AppContainer.Companion.BASE_API_URL
 import com.marin.rickmortyencyclopedia.data.impl.CharacterNetworkDataSource
 import com.marin.rickmortyencyclopedia.data.impl.DefaultCharacterRepository
@@ -22,6 +23,7 @@ interface AppContainer {
 
     val episodesRepository: EpisodesRepository
     val characterRepository: CharacterRepository
+    val errorLogger: (String, String) -> Unit
 }
 
 class DefaultAppContainer() : AppContainer {
@@ -38,5 +40,8 @@ class DefaultAppContainer() : AppContainer {
     override val characterRepository: CharacterRepository by lazy {
         val networkDataSource = CharacterNetworkDataSource(BASE_API_URL, okHttpClient)
         DefaultCharacterRepository(networkDataSource)
+    }
+    override val errorLogger: (String, String) -> Unit by lazy {
+        { tag, message -> Log.e(tag, message) }
     }
 }

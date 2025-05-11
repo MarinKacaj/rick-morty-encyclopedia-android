@@ -3,6 +3,7 @@
  */
 package com.marin.rickmortyencyclopedia.ui.episode
 
+import androidx.annotation.VisibleForTesting
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -13,15 +14,12 @@ import com.marin.rickmortyencyclopedia.RickMortyEncyclopediaApp
 import com.marin.rickmortyencyclopedia.data.AppContainer
 import com.marin.rickmortyencyclopedia.data.EpisodesRepository
 import com.marin.rickmortyencyclopedia.model.EpisodesSnapshot
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 sealed class EpisodesUiState {
 
@@ -34,7 +32,8 @@ sealed class EpisodesUiState {
 
 class EpisodesViewModel(
     val episodesRepository: EpisodesRepository,
-    val errorLogger: (String) -> Unit = {}, // todo actual
+    @get:VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    val errorLogger: (tag: String, message: String) -> Unit = { _, _ -> },
 ) : ViewModel() {
 
     private val initialUiState = EpisodesUiState.Loading
@@ -97,24 +96,31 @@ class EpisodesViewModel(
                                             results = currentUiState.data.episodes.results + episodesSnapshot.episodes.results
                                         ),
                                     ),
-                                    isEndOfList = episodesSnapshot.episodes.info.next == null, // todo refactor
+                                    isEndOfList = episodesSnapshot.episodes.info.next == null,
                                 )
                             }
                         }
                     }
                 }
 
-                else -> errorLogger("Trying to get next page while current UI state is $currentUiState")
+                else -> errorLogger(
+                    TAG,
+                    "Trying to get next page while current UI state is $currentUiState"
+                )
             }
         }
     }
 
     companion object {
+
+        private const val TAG = "EpisodesViewModel"
+
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val app = (this[APPLICATION_KEY] as RickMortyEncyclopediaApp)
                 val episodesRepository = app.appContainer.episodesRepository
-                EpisodesViewModel(episodesRepository)
+                val errorLogger = app.appContainer.errorLogger
+                EpisodesViewModel(episodesRepository, errorLogger)
             }
         }
     }

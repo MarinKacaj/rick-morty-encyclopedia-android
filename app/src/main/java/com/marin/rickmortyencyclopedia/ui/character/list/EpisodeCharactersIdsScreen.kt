@@ -4,12 +4,11 @@
 package com.marin.rickmortyencyclopedia.ui.character.list
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
@@ -51,22 +50,21 @@ fun EpisodeCharactersIdsScreen(
             ) {
 
                 items(charactersIds, key = { it }) { characterId ->
-                    Row(
+                    Column(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(RickMortyEncyclopediaAppTheme.spacing.spacerMedium)
-                            .clickable { onCharacterIdSelected(characterId) }, // todo clickable with padding
+                            .padding(horizontal = RickMortyEncyclopediaAppTheme.spacing.spacerMedium)
+                            .clickable { onCharacterIdSelected(characterId) },
                     ) {
                         Text(
-                            text = stringResource(R.string.character_id_uncover, characterId),
-                            style = MaterialTheme.typography.bodyMedium,
+                            modifier = Modifier.padding(top = RickMortyEncyclopediaAppTheme.spacing.spacerMedium),
+                            text = stringResource(R.string.character_id_entry, characterId),
+                            style = MaterialTheme.typography.bodyLarge,
                         )
-                        Spacer(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .height(RickMortyEncyclopediaAppTheme.spacing.spacerXSmall)
+                        HorizontalDivider(
+                            modifier = Modifier.padding(top = RickMortyEncyclopediaAppTheme.spacing.spacerXSmall),
+                            thickness = RickMortyEncyclopediaAppTheme.sizing.sizerXXSmall
                         )
-                        HorizontalDivider(thickness = RickMortyEncyclopediaAppTheme.sizing.sizerXXSmall)
                     }
                 }
             }

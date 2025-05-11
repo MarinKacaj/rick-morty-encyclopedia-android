@@ -7,7 +7,7 @@
     <string name="last_update">Last updated on %1$s</string>
 
     <string name="characters_ids">Characters of %1$s</string>
-    <string name="character_id_uncover">Uncover %1$d</string>
+    <string name="character_id_entry">Character %1$d</string>
     <string name="character_id_title">Character %1$d</string>
     <string name="character_photo">Photo of %1$s</string>
     <string name="character_name">Name</string>
