@@ -10,6 +10,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import com.marin.rickmortyencyclopedia.RickMortyEncyclopediaApp
+import com.marin.rickmortyencyclopedia.data.AppContainer
 import com.marin.rickmortyencyclopedia.data.EpisodesRepository
 import com.marin.rickmortyencyclopedia.model.EpisodesSnapshot
 import kotlinx.coroutines.Dispatchers
@@ -51,7 +52,7 @@ class EpisodesViewModel(
             withContext(Dispatchers.IO) { delay(3000L) } // todo undo
 
             val result = episodesRepository.getEpisodes(
-                from = "https://rickandmortyapi.com/api/episode" // todo centralise
+                from = "${AppContainer.BASE_API_URL}/episode"
             )
 
             val episodesSnapshot: EpisodesSnapshot? = result.getOrNull()

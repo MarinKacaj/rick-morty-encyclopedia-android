@@ -3,6 +3,9 @@
  */
 package com.marin.rickmortyencyclopedia.data
 
+import com.marin.rickmortyencyclopedia.data.AppContainer.Companion.BASE_API_URL
+import com.marin.rickmortyencyclopedia.data.impl.CharacterNetworkDataSource
+import com.marin.rickmortyencyclopedia.data.impl.DefaultCharacterRepository
 import com.marin.rickmortyencyclopedia.data.impl.DefaultEpisodesRepository
 import com.marin.rickmortyencyclopedia.data.impl.EpisodesNetworkDataSource
 import okhttp3.OkHttpClient
@@ -13,7 +16,12 @@ import okhttp3.OkHttpClient
 
 interface AppContainer {
 
+    companion object {
+        const val BASE_API_URL = "https://rickandmortyapi.com/api"
+    }
+
     val episodesRepository: EpisodesRepository
+    val characterRepository: CharacterRepository
 }
 
 class DefaultAppContainer() : AppContainer {
@@ -27,4 +35,8 @@ class DefaultAppContainer() : AppContainer {
         DefaultEpisodesRepository(networkDataSource)
     }
 
+    override val characterRepository: CharacterRepository by lazy {
+        val networkDataSource = CharacterNetworkDataSource(BASE_API_URL, okHttpClient)
+        DefaultCharacterRepository(networkDataSource)
+    }
 }

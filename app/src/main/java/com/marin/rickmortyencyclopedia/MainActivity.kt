@@ -9,6 +9,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.marin.rickmortyencyclopedia.ui.character.details.CharacterDetailsScreen
 import com.marin.rickmortyencyclopedia.ui.character.list.EpisodeCharactersIdsScreen
 import com.marin.rickmortyencyclopedia.ui.episode.EpisodesScreen
 import com.marin.rickmortyencyclopedia.ui.theme.RickMortyEncyclopediaTheme
@@ -34,6 +35,10 @@ class MainActivity : ComponentActivity() {
                             charactersIds = args.charactersIds,
                             onNavUp = onNavUp,
                         )
+                    }
+                    composable<Screen.CharacterDetails> {
+                        val args = it.toRoute<Screen.CharacterDetails>()
+                        CharacterDetailsScreen(id = args.characterId, onNavUp = onNavUp)
                     }
                 }
             }

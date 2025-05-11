@@ -3,11 +3,16 @@
  */
 package com.marin.rickmortyencyclopedia.ui.character.details
 
+import androidx.lifecycle.DEFAULT_ARGS_KEY
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import com.marin.rickmortyencyclopedia.RickMortyEncyclopediaApp
 import com.marin.rickmortyencyclopedia.data.CharacterRepository
 import com.marin.rickmortyencyclopedia.model.CharacterSnapshot
-import com.marin.rickmortyencyclopedia.ui.episode.EpisodesUiState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,7 +33,7 @@ sealed class CharacterUiState {
 }
 
 
-class CharacterViewModel(
+class CharacterDetailsViewModel(
     val id: Int,
     val characterRepository: CharacterRepository,
 ) : ViewModel() {
@@ -59,6 +64,22 @@ class CharacterViewModel(
                 _uiState.update {
                     CharacterUiState.Error(error = result.toString())
                 }
+            }
+        }
+    }
+
+    companion object {
+
+        const val PARAM_CHARACTER_ID = "param.character.id"
+
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+
+                val app = (this[APPLICATION_KEY] as RickMortyEncyclopediaApp)
+                val characterRepository = app.appContainer.characterRepository
+
+                val id = checkNotNull(this[DEFAULT_ARGS_KEY]).getInt(PARAM_CHARACTER_ID)
+                CharacterDetailsViewModel(id, characterRepository)
             }
         }
     }

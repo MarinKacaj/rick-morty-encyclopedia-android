@@ -16,4 +16,7 @@ sealed interface Screen {
         val charactersIds: List<Int>,
         val episodeCode: String,
     ) : Screen
+
+    @Serializable
+    data class CharacterDetails(val characterId: Int)
 }
