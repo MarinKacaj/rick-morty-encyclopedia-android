@@ -4,7 +4,7 @@
 package com.marin.rickmortyencyclopedia.data
 
 import com.marin.rickmortyencyclopedia.data.impl.DefaultEpisodesRepository
-import com.marin.rickmortyencyclopedia.data.impl.OkHttpEpisodesNetworkDataSource
+import com.marin.rickmortyencyclopedia.data.impl.EpisodesNetworkDataSource
 import okhttp3.OkHttpClient
 
 
@@ -23,7 +23,7 @@ class DefaultAppContainer() : AppContainer {
     }
 
     override val episodesRepository: EpisodesRepository by lazy {
-        val networkDataSource = OkHttpEpisodesNetworkDataSource(okHttpClient)
+        val networkDataSource = EpisodesNetworkDataSource(okHttpClient)
         DefaultEpisodesRepository(networkDataSource)
     }
 

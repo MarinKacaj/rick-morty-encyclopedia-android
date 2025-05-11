@@ -4,7 +4,7 @@
 package com.marin.rickmortyencyclopedia.data.impl
 
 import com.marin.rickmortyencyclopedia.data.ApiException
-import com.marin.rickmortyencyclopedia.data.EpisodesNetworkDataSource
+import com.marin.rickmortyencyclopedia.data.EpisodesDataSource
 import com.marin.rickmortyencyclopedia.model.Episodes
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
@@ -14,11 +14,11 @@ import okhttp3.Request
 import kotlinx.serialization.json.Json
 
 
-class OkHttpEpisodesNetworkDataSource(
+class EpisodesNetworkDataSource(
     val okHttpClient: OkHttpClient,
     val ioDispatcher: CoroutineDispatcher = Dispatchers.IO,
     val parsingDispatcher: CoroutineDispatcher = Dispatchers.Default,
-) : EpisodesNetworkDataSource {
+) : EpisodesDataSource {
 
     override suspend fun getEpisodes(from: String): Result<Episodes> {
         val request = Request.Builder().url(from).build()

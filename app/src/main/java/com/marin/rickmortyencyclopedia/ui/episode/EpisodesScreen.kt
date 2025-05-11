@@ -40,6 +40,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.semantics.semantics
+import androidx.core.net.toUri
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.marin.rickmortyencyclopedia.R
@@ -55,7 +56,7 @@ import java.time.format.FormatStyle
 @Composable
 fun EpisodesScreen(
     viewModel: EpisodesViewModel = viewModel(factory = EpisodesViewModel.Factory),
-    onEpisodeSelected: (episodeId: Int) -> Unit = {},
+    onEpisodeSelected: (code: String, charactersIds: List<Int>) -> Unit = { _, _ -> },
 ) {
 
     val uiState: EpisodesUiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -99,7 +100,13 @@ fun EpisodesScreen(
                                 airDate = episode.airDate,
                                 name = episode.name,
                                 code = episode.code,
-                                onEpisodeSelected = onEpisodeSelected,
+                                onEpisodeSelected = {
+                                    onEpisodeSelected(
+                                        episode.code,
+                                        episode.characters.mapNotNull { // just to be on the safe side
+                                            it.toUri().pathSegments.lastOrNull()?.toInt()
+                                        })
+                                },
                             )
                         }
 

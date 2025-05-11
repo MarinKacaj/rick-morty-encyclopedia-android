@@ -3,13 +3,13 @@
  */
 package com.marin.rickmortyencyclopedia.data.impl
 
-import com.marin.rickmortyencyclopedia.data.EpisodesNetworkDataSource
+import com.marin.rickmortyencyclopedia.data.EpisodesDataSource
 import com.marin.rickmortyencyclopedia.data.EpisodesRepository
 import com.marin.rickmortyencyclopedia.model.EpisodesSnapshot
 
 
 class DefaultEpisodesRepository(
-    val networkDataSource: EpisodesNetworkDataSource,
+    val networkDataSource: EpisodesDataSource,
 ) : EpisodesRepository {
 
     override suspend fun getEpisodes(

@@ -3,6 +3,7 @@
  */
 package com.marin.rickmortyencyclopedia.ui
 
+import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -20,17 +21,21 @@ import com.marin.rickmortyencyclopedia.R
 fun RickMortyAppBar(
     modifier: Modifier = Modifier,
     canNavBack: Boolean = false,
-    title: String = "Rick and Morty"
+    title: String = "Rick and Morty",
+    onNavBack: () -> Unit = {},
 ) {
 
     TopAppBar(
-        modifier = modifier, // todo reconsider
+        modifier = modifier,
         title = {
             Text(text = title)
         },
         navigationIcon = {
             if (canNavBack) {
                 Icon(
+                    modifier = Modifier.clickable {
+                        onNavBack()
+                    },
                     imageVector = Icons.AutoMirrored.Default.ArrowBack,
                     contentDescription = stringResource(R.string.back)
                 )

@@ -6,7 +6,7 @@ package com.marin.rickmortyencyclopedia.data
 import com.marin.rickmortyencyclopedia.model.Episodes
 
 
-interface EpisodesNetworkDataSource {
+interface EpisodesDataSource {
 
     suspend fun getEpisodes(from: String): Result<Episodes>
 }

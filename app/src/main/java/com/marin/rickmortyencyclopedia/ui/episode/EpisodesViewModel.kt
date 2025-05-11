@@ -51,7 +51,7 @@ class EpisodesViewModel(
             withContext(Dispatchers.IO) { delay(3000L) } // todo undo
 
             val result = episodesRepository.getEpisodes(
-                from = "https://rickandmortyapi.com/api/episode"
+                from = "https://rickandmortyapi.com/api/episode" // todo centralise
             )
 
             val episodesSnapshot: EpisodesSnapshot? = result.getOrNull()

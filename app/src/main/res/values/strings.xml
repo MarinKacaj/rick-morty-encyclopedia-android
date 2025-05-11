@@ -3,5 +3,8 @@
     <string name="back">Back</string>
     <string name="episodes">Rick and Morty Episodes</string>
     <string name="end_of_list">Nothing left to see</string>
-    <string name="last_update">Last updated on %1$s!</string>
+    <string name="last_update">Last updated on %1$s</string>
+
+    <string name="characters_ids">Characters of %1$s</string>
+    <string name="character_id_uncover">Uncover %1$d</string>
 </resources>

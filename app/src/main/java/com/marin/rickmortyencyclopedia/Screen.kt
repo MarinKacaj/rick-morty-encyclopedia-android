@@ -3,8 +3,17 @@
  */
 package com.marin.rickmortyencyclopedia
 
+import kotlinx.serialization.Serializable
 
-enum class Screen(val route: String) {
 
-    Episodes(route = "episodes"), Characters(route = "characters")
+sealed interface Screen {
+
+    @Serializable
+    data object Episodes : Screen
+
+    @Serializable
+    data class Characters(
+        val charactersIds: List<Int>,
+        val episodeCode: String,
+    ) : Screen
 }
