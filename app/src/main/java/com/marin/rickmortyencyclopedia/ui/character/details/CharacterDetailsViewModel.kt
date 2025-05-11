@@ -73,12 +73,13 @@ class CharacterDetailsViewModel(
         const val PARAM_CHARACTER_ID = "param.character.id"
 
         val Factory: ViewModelProvider.Factory = viewModelFactory {
+
             initializer {
 
                 val app = (this[APPLICATION_KEY] as RickMortyEncyclopediaApp)
                 val characterRepository = app.appContainer.characterRepository
-
                 val id = checkNotNull(this[DEFAULT_ARGS_KEY]).getInt(PARAM_CHARACTER_ID)
+
                 CharacterDetailsViewModel(id, characterRepository)
             }
         }

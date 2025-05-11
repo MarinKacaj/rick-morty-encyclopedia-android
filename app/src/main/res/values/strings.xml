@@ -8,4 +8,5 @@
     <string name="characters_ids">Characters of %1$s</string>
     <string name="character_id_uncover">Uncover %1$d</string>
     <string name="character_id_title">Character %1$d</string>
+    <string name="character_photo">Photo of %1$s</string>
 </resources>

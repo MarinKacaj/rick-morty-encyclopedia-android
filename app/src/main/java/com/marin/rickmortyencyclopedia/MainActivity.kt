@@ -33,6 +33,9 @@ class MainActivity : ComponentActivity() {
                         EpisodeCharactersIdsScreen(
                             episodeCode = args.episodeCode,
                             charactersIds = args.charactersIds,
+                            onCharacterIdSelected = {
+                                navController.navigate(Screen.CharacterDetails(characterId = it))
+                            },
                             onNavUp = onNavUp,
                         )
                     }
