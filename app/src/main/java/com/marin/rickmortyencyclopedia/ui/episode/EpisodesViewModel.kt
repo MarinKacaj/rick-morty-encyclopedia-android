@@ -13,7 +13,6 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import com.marin.rickmortyencyclopedia.RickMortyEncyclopediaApp
 import com.marin.rickmortyencyclopedia.data.AppContainer
 import com.marin.rickmortyencyclopedia.data.EpisodesRepository
-import com.marin.rickmortyencyclopedia.model.Episode
 import com.marin.rickmortyencyclopedia.model.EpisodesSnapshot
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -47,32 +46,13 @@ class EpisodesViewModel(
                         && episodesSnapshot != null // just in case we got null as success (shouldn't happen)
                     ) {
 
-                        // easy lookups in new episodes to check if any has been updated
-                        // why?
-                        // the background worker could have updated any episode(s) as we load new pages
-                        val idNewEpisodes: MutableMap<Int, Episode> =
-                            episodesSnapshot.episodes.results.associate { it.id to it }
-                                .toMutableMap()
-
-                        val combined =
-                            currentUiState.data.episodes.results + episodesSnapshot.episodes.results
-                        val mapOfIds = combined.groupBy { it.id }
-                        val fullyJoinedEpisodes: List<Episode> =
-                            mapOfIds.entries.map { entry: Map.Entry<Int, List<Episode>> ->
-                                // setting as a val for clarity
-                                val id: Int = entry.key
-                                // there's at least one, otherwise how did we get the id first place?
-                                val existingEpisode = entry.value.first()
-                                // is there any episode withe same id in the new list?
-                                val newEpisodeWithId: Episode? = idNewEpisodes[id]
-                                // update episode if in the new list or use existing otherwise
-                                newEpisodeWithId ?: existingEpisode
-                            }
-
                         currentUiState.copy(
                             data = episodesSnapshot.copy(
                                 episodes = episodesSnapshot.episodes.copy(
-                                    results = fullyJoinedEpisodes
+                                    results = fullyJoinEpisodesPreferNew(
+                                        existing = currentUiState.data.episodes.results,
+                                        new = episodesSnapshot.episodes.results,
+                                    )
                                 ),
                             ),
                             isEndOfList = episodesSnapshot.episodes.info.next == null,
