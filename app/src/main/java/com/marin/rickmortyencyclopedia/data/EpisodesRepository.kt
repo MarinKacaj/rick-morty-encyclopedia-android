@@ -4,9 +4,14 @@
 package com.marin.rickmortyencyclopedia.data
 
 import com.marin.rickmortyencyclopedia.model.EpisodesSnapshot
+import kotlinx.coroutines.flow.Flow
 
 
 interface EpisodesRepository {
 
-    suspend fun getEpisodes(from: String, force: Boolean = false): Result<EpisodesSnapshot>
+    val episodesSnapshotFlow: Flow<Result<EpisodesSnapshot>>
+
+    suspend fun nextPage(from: String)
+
+    suspend fun refreshAll(first: String): Result<Unit>
 }

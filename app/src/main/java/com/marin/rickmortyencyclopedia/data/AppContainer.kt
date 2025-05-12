@@ -41,6 +41,7 @@ class DefaultAppContainer() : AppContainer {
         val networkDataSource = CharacterNetworkDataSource(BASE_API_URL, okHttpClient)
         DefaultCharacterRepository(networkDataSource)
     }
+
     override val errorLogger: (String, String) -> Unit by lazy {
         { tag, message -> Log.e(tag, message) }
     }
