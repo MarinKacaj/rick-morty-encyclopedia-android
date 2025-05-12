@@ -16,9 +16,8 @@ import java.util.concurrent.ConcurrentHashMap
 
 class DefaultEpisodesRepository(
     val networkDataSource: EpisodesDataSource,
+    val inMemoryCache: MutableMap<String, EpisodesSnapshot> = ConcurrentHashMap()
 ) : EpisodesRepository {
-
-    private val inMemoryCache: MutableMap<String, EpisodesSnapshot> = ConcurrentHashMap()
 
     private val _episodesSnapshotFlow: MutableSharedFlow<Result<EpisodesSnapshot>> =
         MutableSharedFlow<Result<EpisodesSnapshot>>() // no replay
