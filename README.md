@@ -61,3 +61,9 @@ While, again due to time, I was unable to add something like Room for persistenc
 there's an in-memory cache that behaves similarly to what DAOs would, not in terms of database logic,
 but as single-source-of-truth.
 
+### Background updates of episodes
+
+Episodes are updated in the background, even if the user is scrolling through them and fetching
+next pages as the scroll goes on.
+There's a "deconfliction" mechanism, which always goes for the newer episode model instance.
+The last refresh timestamp is there in the UI due to the background updater, not due to persistence.
