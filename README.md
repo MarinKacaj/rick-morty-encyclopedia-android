@@ -45,9 +45,7 @@ This is why I picked coil over other libraries I know, such as Glide or Picasso 
 
 ### Unit tests
 
-Unfortunately, there are none right now.
-It was just a matter of available time.
-However, the code is organised in such a way that makes unit testing easy.
+None right now, but the code is organised in such a way that makes unit testing easy.
 See the repositories: how they get their "dependencies" injected via the constructor.
 Also, see how most dependencies are on interfaces rather than concrete implementations.
 For example: data sources in repositories and the error logger in `EpisodesViewModel`.
@@ -57,9 +55,8 @@ Most functions are small enough to test easily.
 
 ### Cache
 
-While, again due to time, I was unable to add something like Room for persistence, in episodes,
-there's an in-memory cache that behaves similarly to what DAOs would, not in terms of database logic,
-but as single-source-of-truth.
+In episodes, there's an in-memory cache that behaves similarly to what DAOs would, not in terms of database logic,
+but as single-source-of-truth. Future plan: Room.
 
 ### Background updates of episodes
 
